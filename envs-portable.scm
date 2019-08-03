@@ -56,10 +56,20 @@
 
 ;;
 
+(define (generate-scheme-env)
+  `(scheme-implementation
+    ,@(cond-expand
+        (chibi `((name "Chibi-Scheme")))
+        (gauche `((name "Gauche")
+                  (version ,(implementation-version)))))))
+
+;;
+
 (define stack #f)
 
 (define (environment-stack)
-  (set! stack (or stack (generate-sub-scheme-stack)))
+  (set! stack (or stack (cons (generate-scheme-env)
+                              (generate-sub-scheme-stack))))
   stack)
 
 ;;

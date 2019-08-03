@@ -13,5 +13,9 @@
     (chibi
      (import (srfi 69) (srfi 130))
      (include-shared "chibi-envs")
-     (include "envs-portable.scm")
-     (include "chibi-envs.scm"))))
+     (include "chibi-envs.scm")
+     (include "envs-portable.scm"))
+    (gauche
+     (import (srfi 112))
+     (include "envs-gauche.scm")
+     (include "envs-portable.scm"))))
