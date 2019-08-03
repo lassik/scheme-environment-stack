@@ -58,10 +58,10 @@
 (define (generate-sub-scheme-stack/java)
   (cond-expand
     (kawa
-     (let ((s (java.lang.System:getProperty "os.name")))
-       (cond ((equal? "Mac OS X" s)
-              `((os (name "MacOS"))))
-             (else '()))))
+     (append (let ((s (java.lang.System:getProperty "os.name")))
+               (cond ((equal? "Mac OS X" s)
+                      `((os (name "MacOS"))))
+                     (else '())))))
     (else #f)))
 
 (define (generate-sub-scheme-stack)
