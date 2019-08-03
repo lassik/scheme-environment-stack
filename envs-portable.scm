@@ -7,7 +7,13 @@
 
 ;;
 
-(define os-release-filename "/etc/os-release")
+(define (without-quotes s)
+  (let ((n (string-length s)))
+    (if (and (>= n 2)
+             (char=? #\" (string-ref s 0))
+             (char=? #\" (string-ref s (- n 1))))
+        (substring s 1 (- n 1))
+        s)))
 
 (define (parse-os-release-file filename)
   (with-input-from-file filename
@@ -23,7 +29,8 @@
                      (append
                       fields
                       (list (cons (substring line 0 pivot)
-                                  (substring line (+ pivot 1))))))))))))))
+                                  (without-quotes
+                                   (substring line (+ pivot 1)))))))))))))))
 
 (define (generate-computer uname-m)
   `(computer (architecture . ,uname-m)
@@ -32,6 +39,12 @@
                             ((0) 'little-endian)
                             ((1) 'big-endian)
                             (else 'mixed-endian)))))
+
+(define (generate-os-linux)
+  `(os (family "Linux")
+       ,@(let ((os-release (parse-os-release-file "/etc/os-release")))
+           (let ((pair (assoc "NAME" os-release)))
+             (if (not pair) '() `((name . ,(cdr pair))))))))
 
 (define (generate-sub-scheme-stack/uname)
   (let ((s (os-name))
@@ -43,7 +56,7 @@
           ((equal? "DragonFly" s) "DragonFly BSD")
           ((equal? "FreeBSD" s) "FreeBSD")
           ((or (equal? "Linux" s) (equal? "GNU/Linux" s))
-           `((os (name "Linux"))
+           `(,(generate-os-linux)
              ,(generate-computer m)))
           ((equal? "Android" s) "Android")
           ((equal? "NetBSD" s) "NetBSD")
