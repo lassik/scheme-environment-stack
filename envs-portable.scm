@@ -62,9 +62,11 @@
 (define (generate-scheme-env)
   `(scheme-implementation
     ,@(cond-expand
-        (chibi `((name "Chibi-Scheme")))
-        (gauche `((name "Gauche")
-                  (version ,(implementation-version)))))))
+        (chibi
+         `((name "Chibi-Scheme")))
+        (gauche
+         `((name "Gauche")
+           (version ,(implementation-version)))))))
 
 ;;
 
