@@ -71,15 +71,16 @@
 ;;
 
 (define (generate-scheme-env)
-  `(scheme-implementation
+  `(language-implementation
+    (language scheme)
     ,@(cond-expand
         (chibi
-         `((name "Chibi-Scheme")))
+         `((implementation "Chibi-Scheme")))
         (gauche
-         `((name "Gauche")
+         `((implementation "Gauche")
            (version ,(implementation-version))))
         (kawa
-         `((name "Kawa")
+         `((implementation "Kawa")
            (version ,(scheme-implementation-version)))))))
 
 ;;
