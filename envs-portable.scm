@@ -33,7 +33,7 @@
                             ((1) 'big-endian)
                             (else 'mixed-endian)))))
 
-(define (generate-sub-scheme-stack)
+(define (generate-sub-scheme-stack/uname)
   (let ((s (os-name))
         (r (os-version))
         (m (cpu-architecture)))
@@ -53,6 +53,9 @@
           ((string-prefix? "CYGWIN_NT-" s) "Windows")
           ((string-prefix? "MINGW" s) "Windows")
           ((string-prefix? "MSYS_NT-" s) "Windows"))))
+
+(define (generate-sub-scheme-stack)
+  (generate-sub-scheme-stack/uname))
 
 ;;
 
