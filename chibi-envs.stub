@@ -1,0 +1,49 @@
+(c-system-include "sys/utsname.h")
+
+(c-system-include "string.h")
+
+(c-declare "
+static struct utsname *my_uname(void) {
+    static struct utsname names;
+    static int init;
+    if (!init) {
+        init = 1;
+        if (uname(&names) == -1) {
+            memset(&names, 0, sizeof(names));
+        }
+    }
+    return &names;
+}
+
+const char *my_uname_sysname(void) {
+    const char *s = my_uname()->sysname;
+    return s ? s : \"\";
+}
+
+const char *my_uname_release(void) {
+    const char *s = my_uname()->release;
+    return s ? s : \"\";
+}
+
+const char *my_uname_machine(void) {
+    const char *s = my_uname()->machine;
+    return s ? s : \"\";
+}
+
+int my_byte_order(void) {
+    unsigned long x = 0x12345678;
+    unsigned char a = ((unsigned char *)&x)[0];
+    if (a == 0x12) { return 1; }
+    return 0;
+}
+
+int my_cpu_bits(void) {
+    return sizeof(void *) * CHAR_BIT;
+}
+")
+
+(define-c (const string) (%uname-sysname "my_uname_sysname") ())
+(define-c (const string) (%uname-release "my_uname_release") ())
+(define-c (const string) (%uname-machine "my_uname_machine") ())
+(define-c int (%byte-order "my_byte_order") ())
+(define-c int (%cpu-bits "my_cpu_bits") ())
