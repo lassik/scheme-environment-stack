@@ -1,5 +1,9 @@
 (define-library (envs)
-  (export envs)
+  (export environment-stack
+          environment-computer
+          environment-computer?
+          environment-os
+          environment-os?)
   (import (scheme base)
           (scheme cxr)
           (scheme file)
@@ -9,4 +13,5 @@
     (chibi
      (import (srfi 69) (srfi 130))
      (include-shared "chibi-envs")
+     (include "envs-portable.scm")
      (include "chibi-envs.scm"))))

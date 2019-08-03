@@ -7,8 +7,6 @@
 
 ;;;
 
-(define stack #f)
-
 (define os-release-filename "/etc/os-release")
 
 (define (parse-os-release-file filename)
@@ -56,18 +54,10 @@
           ((string-prefix? "MINGW" s) "Windows")
           ((string-prefix? "MSYS_NT-" s) "Windows"))))
 
-(define (envs)
-  (generate-stack))
+;;;
 
-(define (writeln x)
-  (write x)
-  (newline))
+(define stack #f)
 
-(define (test)
-  (for-each (lambda (fields)
-              (for-each writeln fields)
-              (newline))
-            (map parse-os-release-file
-                 '("os-release_alpine"
-                   "os-release_debian"
-                   "os-release_void"))))
+(define (environment-stack)
+  (set! stack (or stack (generate-stack)))
+  stack)
