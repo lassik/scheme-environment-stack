@@ -5,7 +5,7 @@
             ((char=? (string-ref s i) ch) i)
             (else (loop (+ i 1)))))))
 
-;;;
+;;
 
 (define os-release-filename "/etc/os-release")
 
@@ -54,7 +54,7 @@
           ((string-prefix? "MINGW" s) "Windows")
           ((string-prefix? "MSYS_NT-" s) "Windows"))))
 
-;;;
+;;
 
 (define stack #f)
 
