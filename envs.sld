@@ -18,4 +18,7 @@
     (gauche
      (import (srfi 112))
      (include "envs-gauche.scm")
+     (include "envs-portable.scm"))
+    (kawa
+     (include "envs-kawa.scm")
      (include "envs-portable.scm"))))

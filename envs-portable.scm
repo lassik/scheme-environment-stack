@@ -52,10 +52,21 @@
              ,(generate-computer m)))
           ((string-prefix? "CYGWIN_NT-" s) "Windows")
           ((string-prefix? "MINGW" s) "Windows")
-          ((string-prefix? "MSYS_NT-" s) "Windows"))))
+          ((string-prefix? "MSYS_NT-" s) "Windows")
+          (else '()))))
+
+(define (generate-sub-scheme-stack/java)
+  (cond-expand
+    (kawa
+     (let ((s (java.lang.System:getProperty "os.name")))
+       (cond ((equal? "Mac OS X" s)
+              `((os (name "MacOS"))))
+             (else '()))))
+    (else #f)))
 
 (define (generate-sub-scheme-stack)
-  (generate-sub-scheme-stack/uname))
+  (or (generate-sub-scheme-stack/java)
+      (generate-sub-scheme-stack/uname)))
 
 ;;
 
@@ -66,7 +77,10 @@
          `((name "Chibi-Scheme")))
         (gauche
          `((name "Gauche")
-           (version ,(implementation-version)))))))
+           (version ,(implementation-version))))
+        (kawa
+         `((name "Kawa")
+           (version ,(scheme-implementation-version)))))))
 
 ;;
 
