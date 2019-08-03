@@ -34,14 +34,14 @@
 
 (define (generate-computer uname-m)
   `(computer (architecture . ,uname-m)
-             (cpu-bits ,(%cpu-bits))
-             (byte-order ,(case (%byte-order)
-                            ((0) 'little-endian)
-                            ((1) 'big-endian)
-                            (else 'mixed-endian)))))
+             (cpu-bits . ,(%cpu-bits))
+             (byte-order . ,(case (%byte-order)
+                              ((0) 'little-endian)
+                              ((1) 'big-endian)
+                              (else 'mixed-endian)))))
 
 (define (generate-os-linux)
-  `(os (family "Linux")
+  `(os (family . "Linux")
        ,@(let ((os-release (parse-os-release-file "/etc/os-release")))
            (let ((pair (assoc "NAME" os-release)))
              (if (not pair) '() `((name . ,(cdr pair))))))))
@@ -73,16 +73,16 @@
   (cond-expand
     (kawa
      (append `((language-implementation
-                (language java)
-                (language-version ,(java.lang.System:getProperty
+                (language . java)
+                (language-version . ,(java.lang.System:getProperty
                                     "java.specification.version"))
-                (version ,(java.lang.System:getProperty
-                           "java.vm.version")))
+                (version . ,(java.lang.System:getProperty
+                             "java.vm.version")))
                (language-vm
-                (vendor ,(java.lang.System:getProperty "java.vendor"))))
+                (vendor . ,(java.lang.System:getProperty "java.vendor"))))
              (let ((s (java.lang.System:getProperty "os.name")))
                (cond ((equal? "Mac OS X" s)
-                      `((os (name "MacOS"))))
+                      `((os (name . "MacOS"))))
                      (else '())))))
     (else #f)))
 
@@ -94,16 +94,16 @@
 
 (define (generate-scheme-env)
   `(language-implementation
-    (language scheme)
+    (language . scheme)
     ,@(cond-expand
         (chibi
-         `((implementation "Chibi-Scheme")))
+         `((implementation . "Chibi-Scheme")))
         (gauche
-         `((implementation "Gauche")
-           (version ,(implementation-version))))
+         `((implementation . "Gauche")
+           (version . ,(implementation-version))))
         (kawa
-         `((implementation "Kawa")
-           (version ,(scheme-implementation-version)))))))
+         `((implementation . "Kawa")
+           (version . ,(scheme-implementation-version)))))))
 
 ;;
 
