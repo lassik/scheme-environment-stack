@@ -50,6 +50,7 @@
           ((equal? "OpenBSD" s)
            `((os (name "OpenBSD"))
              ,(generate-computer m)))
+          ((string-prefix? "SunOS" s) "Solaris")
           ((string-prefix? "CYGWIN_NT-" s) "Windows")
           ((string-prefix? "MINGW" s) "Windows")
           ((string-prefix? "MSYS_NT-" s) "Windows")
@@ -58,7 +59,15 @@
 (define (generate-sub-scheme-stack/java)
   (cond-expand
     (kawa
-     (append (let ((s (java.lang.System:getProperty "os.name")))
+     (append `((language-implementation
+                (language java)
+                (language-version ,(java.lang.System:getProperty
+                                    "java.specification.version"))
+                (version ,(java.lang.System:getProperty
+                           "java.vm.version")))
+               (language-vm
+                (vendor ,(java.lang.System:getProperty "java.vendor"))))
+             (let ((s (java.lang.System:getProperty "os.name")))
                (cond ((equal? "Mac OS X" s)
                       `((os (name "MacOS"))))
                      (else '())))))
