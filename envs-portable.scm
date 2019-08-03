@@ -33,7 +33,7 @@
                             ((1) 'big-endian)
                             (else 'mixed-endian)))))
 
-(define (generate-stack)
+(define (generate-sub-scheme-stack)
   (let ((s (%uname-sysname))
         (r (%uname-release))
         (m (%uname-machine)))
@@ -59,7 +59,7 @@
 (define stack #f)
 
 (define (environment-stack)
-  (set! stack (or stack (generate-stack)))
+  (set! stack (or stack (generate-sub-scheme-stack)))
   stack)
 
 ;;
