@@ -42,8 +42,8 @@ int my_cpu_bits(void) {
 }
 ")
 
-(define-c (const string) (%uname-sysname "my_uname_sysname") ())
-(define-c (const string) (%uname-release "my_uname_release") ())
-(define-c (const string) (%uname-machine "my_uname_machine") ())
+(define-c (const string) (os-name "my_uname_sysname") ())
+(define-c (const string) (os-version "my_uname_release") ())
+(define-c (const string) (cpu-architecture "my_uname_machine") ())
 (define-c int (%byte-order "my_byte_order") ())
 (define-c int (%cpu-bits "my_cpu_bits") ())

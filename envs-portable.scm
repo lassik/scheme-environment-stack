@@ -34,9 +34,9 @@
                             (else 'mixed-endian)))))
 
 (define (generate-sub-scheme-stack)
-  (let ((s (%uname-sysname))
-        (r (%uname-release))
-        (m (%uname-machine)))
+  (let ((s (os-name))
+        (r (os-version))
+        (m (cpu-architecture)))
     (cond ((equal? "Darwin" s)
            `((os "MacOS")
              ,(generate-computer m)))
