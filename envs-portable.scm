@@ -32,6 +32,15 @@
                                   (without-quotes
                                    (substring line (+ pivot 1)))))))))))))))
 
+(define (generate-linux-container-stack)
+  (let* ((cg (with-input-from-file "/proc/1/cgroup"
+               (lambda () (read-string 500))))
+         (vendor (cond ((string-contains cg "/kubepod/") "Kubernetes")
+                       ((string-contains cg "/docker/") "Docker")
+                       ((string-contains cg "/lxc") "LXC")
+                       (else #f))))
+    (if (not vendor) '() `((container (vendor . ,vendor))))))
+
 (define (generate-computer uname-m)
   `(computer (architecture . ,uname-m)
              (cpu-bits . ,(%cpu-bits))
@@ -56,7 +65,8 @@
           ((equal? "DragonFly" s) "DragonFly BSD")
           ((equal? "FreeBSD" s) "FreeBSD")
           ((or (equal? "Linux" s) (equal? "GNU/Linux" s))
-           `(,(generate-os-linux)
+           `(,@(generate-linux-container-stack)
+             ,(generate-os-linux)
              ,(generate-computer m)))
           ((equal? "Android" s) "Android")
           ((equal? "NetBSD" s) "NetBSD")
